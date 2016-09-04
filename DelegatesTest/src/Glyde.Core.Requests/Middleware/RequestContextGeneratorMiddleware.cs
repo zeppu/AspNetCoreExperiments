@@ -1,29 +1,24 @@
 using System;
 using System.Threading.Tasks;
-using DelegatesTest.RequestContext;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
-namespace DelegatesTest.Middleware
+namespace Glyde.Core.Requests.Middleware
 {
     public class RequestContextGeneratorMiddleware
     {
-        private readonly ILoggerFactory _loggerFactory;
         private readonly RequestDelegate _next;
         private readonly IServiceProvider _serviceProvider;
 
-        public RequestContextGeneratorMiddleware(RequestDelegate next, IServiceProvider serviceProvider,
-            ILoggerFactory loggerFactory)
+        public RequestContextGeneratorMiddleware(RequestDelegate next, IServiceProvider serviceProvider)
         {
             _next = next;
             _serviceProvider = serviceProvider;
-            _loggerFactory = loggerFactory;
         }
 
         public Task Invoke(HttpContext context)
         {
             context.Items.Add(typeof (IRequestContext),
-                new RequestContext.RequestContext(context, _serviceProvider));
+                new RequestContext(context, _serviceProvider));
             return _next(context);
         }
     }

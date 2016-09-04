@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DelegatesTest.RequestContext
+namespace Glyde.Core.Requests
 {
     public class RequestContext : IRequestContext
     {

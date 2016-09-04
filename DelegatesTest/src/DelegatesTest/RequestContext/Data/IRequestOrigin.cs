@@ -1,3 +1,5 @@
+using Glyde.Core.Requests;
+
 namespace DelegatesTest.RequestContext.Data
 {
     public interface IRequestOrigin : IRequestData

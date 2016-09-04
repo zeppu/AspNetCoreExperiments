@@ -1,4 +1,4 @@
-namespace DelegatesTest.RequestContext.Data
+namespace Glyde.Core.DeviceDetection.Models
 {
     public class DeviceInformation : IDeviceInformation
     {

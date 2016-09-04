@@ -1,9 +1,9 @@
-using DelegatesTest.RequestContext;
-using DelegatesTest.RequestContext.Data;
+using Glyde.Core.DeviceDetection.Models;
+using Glyde.Core.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 
-namespace DelegatesTest.Services
+namespace Glyde.Core.DeviceDetection.Services
 {
     public class DeviceInformationService : IRequestContextDataGenerator<IDeviceInformation>
     {

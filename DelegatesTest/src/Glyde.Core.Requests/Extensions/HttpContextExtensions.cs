@@ -1,7 +1,6 @@
-using DelegatesTest.RequestContext;
 using Microsoft.AspNetCore.Http;
 
-namespace DelegatesTest.Extensions
+namespace Glyde.Core.Requests.Extensions
 {
     public static class HttpContextExtensions
     {

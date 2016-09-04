@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using ApplicationHealthServices;
-using ApplicationHealthServices.HealthService;
 using DelegatesTest.Extensions;
 using DelegatesTest.Middleware;
-using DelegatesTest.RequestContext;
-using DelegatesTest.RequestContext.Data;
 using DelegatesTest.Services;
+using Glyde.Core.Requests.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 
 namespace DelegatesTest
@@ -43,14 +38,11 @@ namespace DelegatesTest
             var assemblies = assemblyParts.Select(p => Assembly.Load(new AssemblyName(p.Name))).ToList();
 
             services.AddApplicationHealthServices(assemblies);
-            //services.AddSingleton<IHealthService, SimpleHealthService>();
-            //services.AddSingleton<IHealthService, BackgroundHealthService>();
-            services.AddMvc();
-
             services.UseRequestGenerators(assemblies);
-
             services.AddSingleton<IIpService, DummyIpService>();
             services.AddScoped<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
+            services.AddMvcCore()
+                .AddJsonFormatters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,9 +53,9 @@ namespace DelegatesTest
             app.UseApplicationHealthServices();
             app
                 .UseMiddleware<ErrorHandlingMiddleware>()
-                .UseMiddleware<HeaderValidationMiddleware>()
+//                .UseMiddleware<HeaderValidationMiddleware>()
                 .UseForwardedHeaders()
-                .UseMiddleware<RequestContextGeneratorMiddleware>()
+                .UseRequestContextGenerator()
                 .UseMvc();
         }
     }

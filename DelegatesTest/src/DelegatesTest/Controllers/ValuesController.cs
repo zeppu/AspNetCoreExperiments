@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DelegatesTest.Extensions;
+﻿using DelegatesTest.Extensions;
 using DelegatesTest.RequestContext.Data;
+using Glyde.Core.DeviceDetection.Extensions;
+using Glyde.Core.Requests.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DelegatesTest.Controllers

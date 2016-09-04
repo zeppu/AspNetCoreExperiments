@@ -1,5 +1,5 @@
-using DelegatesTest.RequestContext;
 using DelegatesTest.RequestContext.Data;
+using Glyde.Core.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 

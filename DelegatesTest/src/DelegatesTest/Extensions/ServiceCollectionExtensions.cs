@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DelegatesTest.RequestContext;
+using Glyde.Core.Requests;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DelegatesTest.Extensions

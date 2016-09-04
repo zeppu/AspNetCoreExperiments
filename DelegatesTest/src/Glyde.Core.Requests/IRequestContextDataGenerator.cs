@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace DelegatesTest.RequestContext
+namespace Glyde.Core.Requests
 {
     public interface IRequestContextDataGenerator<out T> where T : class, IRequestData
     {

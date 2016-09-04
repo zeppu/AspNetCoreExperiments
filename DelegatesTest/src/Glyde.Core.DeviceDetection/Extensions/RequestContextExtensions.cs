@@ -1,7 +1,7 @@
-﻿using DelegatesTest.RequestContext;
-using DelegatesTest.RequestContext.Data;
+﻿using Glyde.Core.DeviceDetection.Models;
+using Glyde.Core.Requests;
 
-namespace DelegatesTest.Extensions
+namespace Glyde.Core.DeviceDetection.Extensions
 {
     public static class RequestContextExtensions
     {
