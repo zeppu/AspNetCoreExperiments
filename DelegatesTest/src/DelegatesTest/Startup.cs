@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ApplicationHealthServices;
+using ApplicationHealthServices.HealthService;
 using DelegatesTest.Extensions;
 using DelegatesTest.Middleware;
 using DelegatesTest.RequestContext;
@@ -33,6 +35,9 @@ namespace DelegatesTest
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddApplicationHealthServices();
+            services.AddSingleton<IHealthService, SimpleHealthService>();
+            services.AddSingleton<IHealthService, BackgroundHealthService>();
             services.AddMvc();
 
             services.UseRequestGenerators(Assembly.GetEntryAssembly());
@@ -46,10 +51,11 @@ namespace DelegatesTest
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            app.UseApplicationHealthServices();
             app
-                .UseForwardedHeaders()
                 .UseMiddleware<ErrorHandlingMiddleware>()
                 .UseMiddleware<HeaderValidationMiddleware>()
+                .UseForwardedHeaders()
                 .UseMiddleware<RequestContextGeneratorMiddleware>()
                 .UseMvc();
         }
