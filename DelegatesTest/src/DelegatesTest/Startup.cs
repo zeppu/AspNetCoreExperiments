@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using DelegatesTest.Extensions;
 using DelegatesTest.Middleware;
 using DelegatesTest.RequestContext;
 using DelegatesTest.RequestContext.Data;
@@ -33,8 +34,10 @@ namespace DelegatesTest
         {
             // Add framework services.
             services.AddMvc();
-            DiscoverRequestDataGenerators(services, Assembly.GetEntryAssembly());
+            services.UseRequestGenerators(Assembly.GetEntryAssembly());
+
             services.AddSingleton<IIpService, DummyIpService>();
+            services.AddTransient<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,29 +45,9 @@ namespace DelegatesTest
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            app.UseMiddleware<HeaderValidationMiddleware>();
             app.UseMiddleware<RequestContextGeneratorMiddleware>();
             app.UseMvc();
-        }
-
-        public void DiscoverRequestDataGenerators(IServiceCollection serviceCollection, params Assembly[] assemblies)
-        {
-            var requestDataGeneratorType = typeof (IRequestContextDataGenerator<IRequestData>);
-            foreach (var assembly in assemblies)
-            {
-                var dataGeneratorImplementations = assembly.GetTypes().Where(p => requestDataGeneratorType.IsAssignableFrom(p)).ToList();
-                foreach (var implementationType in dataGeneratorImplementations)
-                {
-                    if (implementationType.GetTypeInfo().IsInterface)
-                        continue;
-
-                    var dataGeneratorInterfaces = implementationType.GetTypeInfo().GetInterfaces().Where(m => requestDataGeneratorType.IsAssignableFrom(m));
-                    foreach (var dataGeneratorInterface in dataGeneratorInterfaces)
-                    {
-                        serviceCollection.AddTransient(dataGeneratorInterface, implementationType);
-                    }
-                }
-            }
         }
     }
 }

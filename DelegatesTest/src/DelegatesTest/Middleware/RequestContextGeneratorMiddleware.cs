@@ -24,8 +24,6 @@ namespace DelegatesTest.Middleware
         {
             context.Items.Add(typeof (IRequestContext),
                 new RequestContext.RequestContext(context, _serviceProvider));
-
-            context.Response.Headers.Add("X-Zeppu-Version", "1.0");
             return _next(context);
         }
     }
