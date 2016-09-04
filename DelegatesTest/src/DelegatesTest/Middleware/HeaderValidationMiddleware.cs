@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DelegatesTest.Services;
 using Microsoft.AspNetCore.Http;
@@ -23,7 +24,9 @@ namespace DelegatesTest.Middleware
         {
             var valid = _requestValidator.IsValid(context.Request);
             context.Response.Headers.Add("X-Zeppu-Version", "1.0");
-            return valid ? _next(context) : context.Response.WriteAsync("Bad headers");
+            if (valid) return _next(context);
+            
+            throw new Exception("Bad headers!");
         }
     }
 }

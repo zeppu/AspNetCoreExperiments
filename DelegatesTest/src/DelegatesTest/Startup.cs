@@ -34,10 +34,11 @@ namespace DelegatesTest
         {
             // Add framework services.
             services.AddMvc();
+
             services.UseRequestGenerators(Assembly.GetEntryAssembly());
 
             services.AddSingleton<IIpService, DummyIpService>();
-            services.AddTransient<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
+            services.AddScoped<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,9 +46,12 @@ namespace DelegatesTest
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseMiddleware<HeaderValidationMiddleware>();
-            app.UseMiddleware<RequestContextGeneratorMiddleware>();
-            app.UseMvc();
+            app
+                .UseForwardedHeaders()
+                .UseMiddleware<ErrorHandlingMiddleware>()
+                .UseMiddleware<HeaderValidationMiddleware>()
+                .UseMiddleware<RequestContextGeneratorMiddleware>()
+                .UseMvc();
         }
     }
 }
