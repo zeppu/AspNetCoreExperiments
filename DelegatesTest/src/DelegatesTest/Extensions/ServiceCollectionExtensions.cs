@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using DelegatesTest.RequestContext;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,9 +8,8 @@ namespace DelegatesTest.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void UseRequestGenerators(this IServiceCollection serviceCollection, params Assembly[] assemblies)
+        public static void UseRequestGenerators(this IServiceCollection serviceCollection, IEnumerable<Assembly> assemblies)
         {
-            var requestDataGeneratorType = typeof(IRequestContextDataGenerator<IRequestData>);
             foreach (var assembly in assemblies)
             {
                 var assemblyTypes = assembly.GetTypes();

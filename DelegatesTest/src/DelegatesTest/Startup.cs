@@ -11,8 +11,10 @@ using DelegatesTest.RequestContext.Data;
 using DelegatesTest.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 
 namespace DelegatesTest
@@ -35,12 +37,17 @@ namespace DelegatesTest
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddApplicationHealthServices();
-            services.AddSingleton<IHealthService, SimpleHealthService>();
-            services.AddSingleton<IHealthService, BackgroundHealthService>();
+            var thisAssembly = Assembly.GetEntryAssembly();
+            var assemblyParts = DefaultAssemblyPartDiscoveryProvider.DiscoverAssemblyParts(thisAssembly.FullName);
+
+            var assemblies = assemblyParts.Select(p => Assembly.Load(new AssemblyName(p.Name))).ToList();
+
+            services.AddApplicationHealthServices(assemblies);
+            //services.AddSingleton<IHealthService, SimpleHealthService>();
+            //services.AddSingleton<IHealthService, BackgroundHealthService>();
             services.AddMvc();
 
-            services.UseRequestGenerators(Assembly.GetEntryAssembly());
+            services.UseRequestGenerators(assemblies);
 
             services.AddSingleton<IIpService, DummyIpService>();
             services.AddScoped<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
