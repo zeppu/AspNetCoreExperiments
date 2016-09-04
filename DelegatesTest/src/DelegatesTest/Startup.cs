@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.Logging;
 
 namespace DelegatesTest
@@ -33,12 +34,21 @@ namespace DelegatesTest
         {
             // Add framework services.
             var thisAssembly = Assembly.GetEntryAssembly();
-            var assemblyParts = DefaultAssemblyPartDiscoveryProvider.DiscoverAssemblyParts(thisAssembly.FullName);
 
-            var assemblies = assemblyParts.Select(p => Assembly.Load(new AssemblyName(p.Name))).ToList();
+            var dependencyContext = DependencyContext.Load(thisAssembly);
+            var ownAssemblies = dependencyContext.RuntimeLibraries
+                .Where(r => r.Name.StartsWith("Glyde"))
+                .SelectMany( l => l.GetDefaultAssemblyNames(dependencyContext).Select(Assembly.Load) )
+                .ToList();
+            ownAssemblies.Add(thisAssembly);
 
-            services.AddApplicationHealthServices(assemblies);
-            services.UseRequestGenerators(assemblies);
+
+            //var assemblyParts = DefaultAssemblyPartDiscoveryProvider.DiscoverAssemblyParts(thisAssembly.FullName);
+
+            //var assemblies = assemblyParts.Select(p => Assembly.Load(new AssemblyName(p.Name))).ToList();
+
+            services.AddApplicationHealthServices(ownAssemblies);
+            services.UseRequestGenerators(ownAssemblies);
             services.AddSingleton<IIpService, DummyIpService>();
             services.AddScoped<IRequestValidator>(provider => new HeaderValidator("X-Zeppu-Id", "X-Zeppu-Token"));
             services.AddMvcCore()
