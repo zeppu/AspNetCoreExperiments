@@ -11,16 +11,28 @@ namespace ApplicationHealthServices
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void UseApplicationHealthServices(this IApplicationBuilder app)
+        public static IApplicationBuilder UseApplicationHealthServices(this IApplicationBuilder app, string routePrefix = "", string endPointName = "health")
         {
             var routeBuilder = new RouteBuilder(app)
             {
                 DefaultHandler = (IRouter) app.ApplicationServices.GetRequiredService<ApplicationHealthRouter>()
             };
-            routeBuilder.MapRoute("application-health-default", "health/");
-            routeBuilder.MapRoute("application-health-route", "health/{section}");
+
+            // normalize route prefix and endpoint names
+            routePrefix = routePrefix ?? string.Empty;
+            if (!string.IsNullOrEmpty(routePrefix))
+                routePrefix = routePrefix.Trim('/') + '/';
+
+            endPointName = endPointName ?? "health";
+            endPointName = endPointName.Trim('/') + '/';
+
+
+            routeBuilder.MapRoute("application-health-default", $"{routePrefix}{endPointName}");
+            routeBuilder.MapRoute("application-health-route", $"{routePrefix}{endPointName}"+"{op:regex(status|detailed)}");
 
             app.UseRouter(routeBuilder.Build());
+
+            return app;
         }
     }
 }

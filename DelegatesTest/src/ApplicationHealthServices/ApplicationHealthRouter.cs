@@ -35,7 +35,7 @@ namespace ApplicationHealthServices
 
         private Task Handler(HttpContext context)
         {
-            var section = (string) context.GetRouteValue("section");
+            var section = (string) context.GetRouteValue("op");
 
             switch (section)
             {

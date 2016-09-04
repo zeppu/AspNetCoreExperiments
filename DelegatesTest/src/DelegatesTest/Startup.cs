@@ -50,8 +50,8 @@ namespace DelegatesTest
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            app.UseApplicationHealthServices();
             app
+                .UseApplicationHealthServices(routePrefix: "api")
                 .UseMiddleware<ErrorHandlingMiddleware>()
 //                .UseMiddleware<HeaderValidationMiddleware>()
                 .UseForwardedHeaders()
