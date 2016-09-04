@@ -14,10 +14,10 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "ApplicationHealthServices": "1.0.0-*",
     "Microsoft.AspNetCore.Mvc.Formatters.Json": "1.0.0",
     "Glyde.Core.Requests": "1.0.0-*",
-    "Glyde.Core.DeviceDetection": "1.0.0-*"
+    "Glyde.Core.DeviceDetection": "1.0.0-*",
+    "Glyde.ApplicationHealthServices": "1.0.0-*"
   },
 
   "tools": {
