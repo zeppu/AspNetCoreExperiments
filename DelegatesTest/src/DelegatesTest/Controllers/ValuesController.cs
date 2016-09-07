@@ -1,4 +1,5 @@
-﻿using DelegatesTest.Extensions;
+﻿using System;
+using System.Threading.Tasks;
 using DelegatesTest.RequestContext.Data;
 using Glyde.Core.DeviceDetection.Extensions;
 using Glyde.Core.Requests.Extensions;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DelegatesTest.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ValuesController : Controller
     {
         // GET api/values
@@ -14,11 +15,12 @@ namespace DelegatesTest.Controllers
         public IActionResult Get()
         {
             var ctx = HttpContext.GetRequestContext();
-            return Ok(new
+            var result = new
             {
                 requestOrigin = ctx.Get<IRequestOrigin>(),
                 deviceInformation = ctx.GetDeviceInformation()
-            });
+            };
+            return Ok(result);
         }
 
         // GET api/values/5
