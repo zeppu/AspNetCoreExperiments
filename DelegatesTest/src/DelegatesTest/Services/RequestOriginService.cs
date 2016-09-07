@@ -16,10 +16,10 @@ namespace DelegatesTest.Services
 
         public IRequestOrigin GenerateData(HttpContext context)
         {
-            return new RequestOrigin(
+            return new AsyncRequestOrigin(
                 context.Connection.RemoteIpAddress.ToString(),
                 context.Request.Headers[HeaderNames.Referer],
-                _ipService.GetCountry(context.Connection.RemoteIpAddress.ToString())
+                _ipService.GetCountryAsync(context.Connection.RemoteIpAddress.ToString())
                 );
         }
     }
