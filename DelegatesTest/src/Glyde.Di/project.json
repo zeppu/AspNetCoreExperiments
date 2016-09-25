@@ -4,6 +4,7 @@
   "dependencies": {
     "Glyde.Bootstrapping": "1.0.0-*",
     "Glyde.Configuration": "1.0.0-*",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
     "Microsoft.Extensions.DependencyInjection": "1.0.0",
     "Microsoft.Extensions.DependencyInjection.Abstractions": "1.0.0",
     "NETStandard.Library": "1.6.0"

@@ -1,6 +1,6 @@
 ﻿namespace Glyde.Di
 {
-    public interface IServiceProviderConfigurator
+    public interface IServiceProviderConfigurationBuilder
     {
         void AddTransientService<TContract, TService>()
             where TService : class, TContract where TContract : class;

@@ -20,9 +20,12 @@ using ConfigurationProvider = Glyde.Configuration.ConfigurationProvider;
 
 namespace DelegatesTest
 {
-    public class Startup
+    public class Startup<TDependencyInjectionBootstrapper>
+        where TDependencyInjectionBootstrapper : DependencyInjectionBootstrapper, new()
     {
-        public Startup(IHostingEnvironment env)
+        private readonly TDependencyInjectionBootstrapper _diBootstrapper;
+
+        protected Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -30,12 +33,14 @@ namespace DelegatesTest
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
+            _diBootstrapper = new TDependencyInjectionBootstrapper();
         }
 
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             var thisAssembly = Assembly.GetEntryAssembly();
@@ -61,8 +66,7 @@ namespace DelegatesTest
 
             var configurationProvider = new ConfigurationProvider();
 
-            return services.RegisterAllServices<AspNetServiceProviderBootstrapperInitiator>(ownAssemblies,
-                configurationProvider);
+            services.RegisterAllServices(_diBootstrapper, ownAssemblies, configurationProvider);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,12 +75,20 @@ namespace DelegatesTest
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             app
+                .UseDependencyInjection(_diBootstrapper)
                 .UseApplicationHealthServices(routePrefix: "api")
                 .UseMiddleware<ErrorHandlingMiddleware>()
 //                .UseMiddleware<HeaderValidationMiddleware>()
                 .UseForwardedHeaders()
                 .UseRequestContextGenerator()
                 .UseMvc();
+        }
+    }
+
+    public class Startup : Startup<AspNetCoreBuiltInDependencyInjection>
+    {
+        public Startup(IHostingEnvironment env) : base(env)
+        {
         }
     }
 }

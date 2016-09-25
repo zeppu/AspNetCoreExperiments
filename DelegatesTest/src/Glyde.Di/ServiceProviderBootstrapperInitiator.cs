@@ -13,19 +13,17 @@ namespace Glyde.Di
 
         internal IServiceCollection ServiceCollection { get; set; }
 
-        protected abstract IServiceProviderConfigurator CreateServiceProviderConfigurator();
+        protected abstract IServiceProviderConfigurationBuilder CreateConfigurationBuilder();
 
         public override void Run(IEnumerable<Assembly> assemblies)
         {
             var bootstrappers = GetBootstrappers(assemblies);
-            var serviceProviderConfigurator = CreateServiceProviderConfigurator();
+            var serviceProviderConfigurator = CreateConfigurationBuilder();
 
             foreach (var bootstrapper in bootstrappers)
             {
                 bootstrapper.RegisterServices(serviceProviderConfigurator, ConfigurationProvider);
             }
         }
-
-        internal abstract IServiceProvider CreateServiceProvider();
     }
 }

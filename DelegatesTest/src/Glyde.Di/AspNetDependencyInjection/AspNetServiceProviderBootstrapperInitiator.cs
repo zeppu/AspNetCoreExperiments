@@ -7,14 +7,9 @@ namespace Glyde.Di.AspNetDependencyInjection
     public class AspNetServiceProviderBootstrapperInitiator : ServiceProviderBootstrapperInitiator
     {
 
-        protected override IServiceProviderConfigurator CreateServiceProviderConfigurator()
+        protected override IServiceProviderConfigurationBuilder CreateConfigurationBuilder()
         {
-            return new AspNetServiceProviderConfigurator(ServiceCollection);
-        }
-
-        internal override IServiceProvider CreateServiceProvider()
-        {
-            return ServiceCollection.BuildServiceProvider();
+            return new AspNetServiceProviderConfigurationBuilder(ServiceCollection);
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Glyde.Di.AspNetDependencyInjection
 {
-    public class AspNetServiceProviderConfigurator : IServiceProviderConfigurator
+    public class AspNetServiceProviderConfigurationBuilder : IServiceProviderConfigurationBuilder
     {
         private readonly IServiceCollection _serviceCollection;
 
-        public AspNetServiceProviderConfigurator(IServiceCollection serviceCollection)
+        public AspNetServiceProviderConfigurationBuilder(IServiceCollection serviceCollection)
         {
             _serviceCollection = serviceCollection;
         }

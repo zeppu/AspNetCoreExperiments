@@ -9,6 +9,6 @@ namespace Glyde.Di
 {
     public interface IServiceProviderBootstrapper : IBootstrapper
     {
-        void RegisterServices(IServiceProviderConfigurator serviceProviderConfigurator, IConfigurationProvider configurationProvider );
+        void RegisterServices(IServiceProviderConfigurationBuilder serviceProviderConfigurationBuilder, IConfigurationProvider configurationProvider );
     }
 }
