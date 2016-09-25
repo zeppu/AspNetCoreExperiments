@@ -10,6 +10,7 @@ using Glyde.Configuration;
 using Glyde.Core.Requests.Middleware;
 using Glyde.Di;
 using Glyde.Di.AspNetDependencyInjection;
+using Glyde.Di.SimpleInjector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -85,7 +86,7 @@ namespace DelegatesTest
         }
     }
 
-    public class Startup : Startup<AspNetCoreBuiltInDependencyInjection>
+    public class Startup : Startup<SimpleInjectorDependencyInjection>
     {
         public Startup(IHostingEnvironment env) : base(env)
         {
