@@ -1,11 +1,13 @@
 {
   "version": "1.0.0-*",
 
-    "dependencies": {
-        "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
-        "Microsoft.AspNetCore.Http": "1.0.0",
-        "NETStandard.Library": "1.6.0"
-    },
+  "dependencies": {
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
+    "Microsoft.AspNetCore.Http": "1.0.0",
+    "NETStandard.Library": "1.6.0",
+    "Glyde.Bootstrapping": "1.0.0-*",
+    "Glyde.Di": "1.0.0-*"
+  },
 
   "frameworks": {
     "netstandard1.6": {

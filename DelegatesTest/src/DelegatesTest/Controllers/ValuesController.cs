@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DelegatesTest.RequestContext.Data;
 using Glyde.Core.DeviceDetection.Extensions;
+using Glyde.Core.Requests;
 using Glyde.Core.Requests.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,15 +11,22 @@ namespace DelegatesTest.Controllers
     [Route("[controller]")]
     public class ValuesController : Controller
     {
+        private readonly IRequestContext _requestContext;
+
+        public ValuesController(IRequestContext requestContext)
+        {
+            _requestContext = requestContext;
+        }
+
         // GET api/values
         [HttpGet]
         public IActionResult Get()
         {
-            var ctx = HttpContext.GetRequestContext();
+            //var ctx = HttpContext.GetRequestContext();
             var result = new
             {
-                requestOrigin = ctx.Get<IRequestOrigin>(),
-                deviceInformation = ctx.GetDeviceInformation()
+                requestOrigin = _requestContext.Get<IRequestOrigin>(),
+                deviceInformation = _requestContext.GetDeviceInformation()
             };
             return Ok(result);
         }
